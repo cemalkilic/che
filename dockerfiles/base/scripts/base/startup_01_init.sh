@@ -73,8 +73,6 @@ init_global_vars() {
   FAST_BOOT=false
   CHE_DEBUG=false
   CHE_OFFLINE=false
-  CHE_SKIP_PREFLIGHT=false
-  CHE_SKIP_POSTFLIGHT=false
   CHE_SKIP_NIGHTLY=false
   CHE_SKIP_NETWORK=false
   CHE_SKIP_PULL=false
@@ -209,14 +207,6 @@ init_usage_check() {
     set -x
   fi
 
-  if [[ "$@" == *"--skip:preflight"* ]]; then
-    CHE_SKIP_PREFLIGHT=true
-  fi
-
-  if [[ "$@" == *"--skip:postflight"* ]]; then
-    CHE_SKIP_POSTFLIGHT=true
-  fi
-
   if [[ "$@" == *"--skip:nightly"* ]]; then
     CHE_SKIP_NIGHTLY=true
   fi
@@ -236,61 +226,6 @@ init_usage_check() {
   if [[ "$@" == *"--skip:scripts"* ]]; then
     CHE_SKIP_SCRIPTS=true
   fi
-}
-
-init() {
-  init_constants
-  init_global_vars
-  init_cli_version_check
-  init_usage_check "$@"
-
-  source "${CHE_BASE_SCRIPTS_CONTAINER_SOURCE_DIR}"/startup_02_pre_docker.sh
-
-  # Make sure Docker is working and we have /var/run/docker.sock mounted or valid DOCKER_HOST
-  check_docker "$@"
-
-  # Check to see if Docker is configured with a proxy and pull values
-  check_docker_networking
-
-  # Verify that -i is passed on the command line
-  check_interactive "$@"
-
-  # Only verify mounts after Docker is confirmed to be working.
-  check_mounts "$@"
-
-  # Check to see if --user uid:gid is passed on the command line
-  check_user
-  
-  # Only initialize after mounts have been established so we can write cli.log out to a mount folder
-  init_logging "$@"
-
-  SCRIPTS_CONTAINER_SOURCE_DIR=""
-  SCRIPTS_BASE_CONTAINER_SOURCE_DIR=""
-  if local_repo && ! skip_scripts; then
-     # Use the CLI that is inside the repository.
-     SCRIPTS_CONTAINER_SOURCE_DIR=${CHE_SCRIPTS_CONTAINER_SOURCE_DIR}
-
-    if [[ -d "/repo/dockerfiles/base/scripts/base" ]]; then
-       SCRIPTS_BASE_CONTAINER_SOURCE_DIR="/repo/dockerfiles/base/scripts/base"
-     else
-       SCRIPTS_BASE_CONTAINER_SOURCE_DIR=${CHE_BASE_SCRIPTS_CONTAINER_SOURCE_DIR}
-     fi
-  else
-     # Use the CLI that is inside the container.
-     SCRIPTS_CONTAINER_SOURCE_DIR="/scripts"
-     SCRIPTS_BASE_CONTAINER_SOURCE_DIR=${CHE_BASE_SCRIPTS_CONTAINER_SOURCE_DIR}
-  fi
-
-  source "${SCRIPTS_BASE_CONTAINER_SOURCE_DIR}"/startup_03_pre_networking.sh
-
-  # If offline mode, then load dependent images from disk and populate the local Docker cache.
-  # If not in offline mode, verify that we have access to DockerHub.
-  # This is also the first usage of curl
-  initiate_offline_or_network_mode "$@"
-
-  # Pull the list of images that are necessary. If in offline mode, verifies that the images
-  # are properly loaded into the cache.
-  grab_initial_images
 }
 
 cleanup() {
@@ -329,8 +264,6 @@ start() {
   set -- "${@/\-\-debug/}"
   set -- "${@/\-\-offline/}"
   set -- "${@/\-\-trace/}"
-  set -- "${@/\-\-skip\:preflight/}"
-  set -- "${@/\-\-skip\:postflight/}"
   set -- "${@/\-\-skip\:nightly/}"
   set -- "${@/\-\-skip\:network/}"
   set -- "${@/\-\-skip\:pull/}"
@@ -350,6 +283,9 @@ start() {
 
   # Only verify mounts after Docker is confirmed to be working.
   init_check_mounts "$@"
+
+  # Extract the value of --user from the docker command line
+  init_check_user "$@"
 
   # Only initialize after mounts have been established so we can write cli.log out to a mount folder
   init_logging "$@"
