@@ -168,8 +168,14 @@ public interface JavaLocalizationConstant extends Messages {
     @Key("rename.refactoring.action.name")
     String renameRefactoringActionName();
 
+    @Key("extractMethod.refactoring.action.name")
+    String extractMethodRefactoringActionName();
+    
     @Key("rename.dialog.title")
     String renameDialogTitle();
+
+    @Key("extractMethod.dialog.title")
+    String extractMethodDialogTitle();
 
     @Key("rename.dialog.label")
     String renameDialogLabel();
@@ -311,6 +317,9 @@ public interface JavaLocalizationConstant extends Messages {
 
     @Key("rename.refactoring.action.description")
     String renameRefactoringActionDescription();
+
+    @Key("extractMethod.refactoring.action.description")
+    String extractMethodRefactoringActionDescription();
 
     @Key("failed.to.rename")
     String failedToRename();
