@@ -135,6 +135,12 @@ public interface JavaLocalizationConstant extends Messages {
     @Key("file.structure.action.description")
     String fileStructureActionDescription();
 
+    @Key("overridable.methods.action.name")
+    String overridableMethodsActionName();
+
+    @Key("overridable.methods.action.description")
+    String overridableMethodsActionDescription();
+
     @Key("organize.imports.name")
     String organizeImportsName();
 
