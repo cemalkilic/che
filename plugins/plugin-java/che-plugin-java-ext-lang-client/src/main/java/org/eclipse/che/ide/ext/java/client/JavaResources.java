@@ -149,6 +149,7 @@ public interface JavaResources extends ClientBundle {
     @Source("svg/file-navigation.svg")
     SVGResource fileNavigation();
 
+    // TODO_cemal add svg image
     @Source("svg/overridable-methods.svg")
     SVGResource overridableMethods();
 
