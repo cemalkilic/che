@@ -1,0 +1,41 @@
+package org.eclipse.che.ide.ext.java.client.action;
+
+import org.eclipse.che.ide.api.action.ActionEvent;
+import org.eclipse.che.ide.api.editor.EditorAgent;
+import org.eclipse.che.ide.api.filetypes.FileTypeRegistry;
+import org.eclipse.che.ide.ext.java.client.JavaLocalizationConstant;
+import org.eclipse.che.ide.ext.java.client.JavaResources;
+import org.eclipse.che.ide.ext.java.client.navigation.overrideablemethods.OverridableMethodsPresenter;
+
+/**
+ * Action for open overridable methods window.
+ * Created by cemal on 12.03.2017.
+ */
+public class OverridableMethodsAction extends JavaEditorAction{
+
+    private final OverridableMethodsPresenter overridableMethodsPresenter;
+    private final EditorAgent editorAgent;
+
+    public OverridableMethodsAction(OverridableMethodsPresenter overridableMethodsPresenter,
+                                    JavaLocalizationConstant locale,
+                                    EditorAgent editorAgent,
+                                    JavaResources resources,
+                                    FileTypeRegistry fileTypeRegistry) {
+        super(locale.overridableMethodsActionName(),
+                locale.overridableMethodsActionDescription(),
+                resources.fileNavigation(),
+                editorAgent,
+                fileTypeRegistry);
+
+        this.overridableMethodsPresenter = overridableMethodsPresenter;
+        this.editorAgent = editorAgent;
+
+    }
+
+
+    // TODO_cemal show the OverridableMethodsPresenter dialog
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+}

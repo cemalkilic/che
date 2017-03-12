@@ -1,0 +1,15 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:with field="locale" type="org.eclipse.che.ide.ext.java.client.JavaLocalizationConstant"/>
+
+    <ui:style field="style">
+        .main {
+        width: 400px;
+        height: 450px;
+        }
+    </ui:style>
+
+    <g:DockLayoutPanel addStyleNames="{style.main}" unit="PX" ui:field="treeContainer" debugId="overridable-methods-mainPanel">
+    </g:DockLayoutPanel>
+
+</ui:UiBinder>
