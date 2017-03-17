@@ -39,6 +39,7 @@ import org.eclipse.che.ide.ext.java.client.action.ProjectClasspathAction;
 import org.eclipse.che.ide.ext.java.client.action.QuickDocumentationAction;
 import org.eclipse.che.ide.ext.java.client.action.QuickFixAction;
 import org.eclipse.che.ide.ext.java.client.action.UnmarkDirAsSourceAction;
+import org.eclipse.che.ide.ext.java.client.refactoring.extractMethod.ExtractMethodRefactoringAction;
 import org.eclipse.che.ide.ext.java.client.refactoring.move.CutJavaSourceAction;
 import org.eclipse.che.ide.ext.java.client.refactoring.move.MoveAction;
 import org.eclipse.che.ide.ext.java.client.refactoring.rename.RenameRefactoringAction;
@@ -82,6 +83,7 @@ public class JavaExtension {
                                 MarkDirectoryAsGroup markDirectoryAsGroup,
                                 OrganizeImportsAction organizeImportsAction,
                                 RenameRefactoringAction renameRefactoringAction,
+                                ExtractMethodRefactoringAction extractMethodRefactoringAction,
                                 QuickDocumentationAction quickDocumentationAction,
                                 QuickFixAction quickFixAction,
                                 OpenDeclarationAction openDeclarationAction,

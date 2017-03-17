@@ -119,7 +119,7 @@ public class JavaExtension {
         actionManager.registerAction("openImplementation", openImplementationAction);
         actionManager.registerAction("javaRenameRefactoring", renameRefactoringAction);
         actionManager.registerAction("javaMoveRefactoring", moveAction);
-        actionManager.registerAction("javaExtractMethodRefactroing", extractMethodRefactoringAction);
+        actionManager.registerAction("javaExtractMethodRefactoring", extractMethodRefactoringAction);
         actionManager.registerAction("javaCutRefactoring", cutAction);
         actionManager.registerAction("javaFindUsages", findUsagesAction);
         actionManager.registerAction("javaClassStructure", fileStructureAction);
