@@ -11,6 +11,7 @@
 package org.eclipse.che.ide.ext.java.client.navigation.overrideablemethods;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.eclipse.che.ide.api.app.AppContext;
 import org.eclipse.che.ide.api.editor.EditorAgent;
 import org.eclipse.che.ide.api.editor.EditorPartPresenter;
@@ -22,6 +23,7 @@ import org.eclipse.che.ide.ui.loaders.request.MessageLoader;
 /**
  * Created by cemal on 12.03.2017.
  */
+@Singleton
 public class OverridableMethodsPresenter implements OverridableMethods.ActionDelegate{
 
     private final OverridableMethods view;

@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.che.ide.ext.java.client.navigation.overrideablemethods;
 
+import com.google.inject.ImplementedBy;
 import org.eclipse.che.ide.api.mvp.View;
 import org.eclipse.che.ide.ext.java.shared.dto.model.CompilationUnit;
 import org.eclipse.che.ide.ext.java.shared.dto.model.Member;
@@ -17,6 +18,8 @@ import org.eclipse.che.ide.ext.java.shared.dto.model.Member;
 /**
  * Created by cemal on 12.03.2017.
  */
+@ImplementedBy(OverridableMethodsImpl.class)
+
 public interface OverridableMethods extends View<OverridableMethods.ActionDelegate> {
 
 

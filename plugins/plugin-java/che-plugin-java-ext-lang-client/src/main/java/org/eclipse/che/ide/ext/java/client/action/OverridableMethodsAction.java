@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.che.ide.ext.java.client.action;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.eclipse.che.ide.api.action.ActionEvent;
 import org.eclipse.che.ide.api.editor.EditorAgent;
 import org.eclipse.che.ide.api.filetypes.FileTypeRegistry;
@@ -21,11 +23,13 @@ import org.eclipse.che.ide.ext.java.client.navigation.overrideablemethods.Overri
  * Action for open overridable methods window.
  * Created by cemal on 12.03.2017.
  */
+@Singleton
 public class OverridableMethodsAction extends JavaEditorAction{
 
     private final OverridableMethodsPresenter overridableMethodsPresenter;
     private final EditorAgent editorAgent;
 
+    @Inject
     public OverridableMethodsAction(OverridableMethodsPresenter overridableMethodsPresenter,
                                     JavaLocalizationConstant locale,
                                     EditorAgent editorAgent,
@@ -42,10 +46,10 @@ public class OverridableMethodsAction extends JavaEditorAction{
 
     }
 
-
+    /** {@inheritDoc} */
     // TODO_cemal show the OverridableMethodsPresenter dialog
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        overridableMethodsPresenter.show(editorAgent.getActiveEditor());
     }
 }
