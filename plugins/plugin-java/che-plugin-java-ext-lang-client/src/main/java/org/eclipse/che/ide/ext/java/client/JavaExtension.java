@@ -83,6 +83,7 @@ public class JavaExtension {
                                 MarkDirectoryAsGroup markDirectoryAsGroup,
                                 OrganizeImportsAction organizeImportsAction,
                                 RenameRefactoringAction renameRefactoringAction,
+                                ExtractMethodRefactoringAction extractMethodRefactoringAction,
                                 QuickDocumentationAction quickDocumentationAction,
                                 QuickFixAction quickFixAction,
                                 OpenDeclarationAction openDeclarationAction,
@@ -113,6 +114,7 @@ public class JavaExtension {
         refactorGroup.addSeparator();
         refactorGroup.add(moveAction);
         refactorGroup.add(renameRefactoringAction);
+        refactorGroup.add(extractMethodRefactoringAction);
         assistantGroup.add(refactorGroup, new Constraints(Anchor.BEFORE, "updateDependency"));
 
         actionManager.registerAction("showQuickDoc", quickDocumentationAction);

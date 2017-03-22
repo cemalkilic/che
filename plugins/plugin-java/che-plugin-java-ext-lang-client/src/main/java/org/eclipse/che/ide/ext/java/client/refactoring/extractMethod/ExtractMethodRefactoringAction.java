@@ -19,12 +19,12 @@ import org.eclipse.che.ide.api.event.ActivePartChangedHandler;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-/**
- * Created by Utku on 13.03.2017.
- */
+
 public class ExtractMethodRefactoringAction extends AbstractPerspectiveAction implements ActivePartChangedHandler{
 
-    public ExtractMethodRefactoringAction(@Nullable List<String> perspectives, @NotNull String text, @NotNull String description) {
+    @Inject
+    public ExtractMethodRefactoringAction(@Nullable List<String> perspectives,
+                                          JavaLocalizationConstant locale) {
         super(perspectives, text, description);
     }
 
