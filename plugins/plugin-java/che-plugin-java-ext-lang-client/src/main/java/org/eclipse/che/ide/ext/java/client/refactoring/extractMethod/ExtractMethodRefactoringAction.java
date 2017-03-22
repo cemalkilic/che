@@ -10,22 +10,26 @@
  *******************************************************************************/
 package org.eclipse.che.ide.ext.java.client.refactoring.extractMethod;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 import org.eclipse.che.commons.annotation.Nullable;
 import org.eclipse.che.ide.api.action.AbstractPerspectiveAction;
 import org.eclipse.che.ide.api.action.ActionEvent;
 import org.eclipse.che.ide.api.event.ActivePartChangedEvent;
 import org.eclipse.che.ide.api.event.ActivePartChangedHandler;
+import org.eclipse.che.ide.ext.java.client.JavaLocalizationConstant;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-
+@Singleton
 public class ExtractMethodRefactoringAction extends AbstractPerspectiveAction implements ActivePartChangedHandler{
 
     @Inject
     public ExtractMethodRefactoringAction(@Nullable List<String> perspectives,
                                           JavaLocalizationConstant locale) {
-        super(perspectives, text, description);
+        super(perspectives, locale.extractMethodRefactoringActionName(), extractMethodRefactoringActionDescription());
     }
 
     @Override
