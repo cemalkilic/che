@@ -453,4 +453,10 @@ public interface JavaLocalizationConstant extends Messages {
 
     @Key("macro.project.java.classpath.description")
     String macroProjectJavaClasspathDescription();
+
+    @Key("overridable.methods.action.name")
+   String overridableMethodsActionName();
+
+    @Key("overridable.methods.action.description")
+    String overridableMethodsActionDescription();
 }

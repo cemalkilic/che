@@ -25,20 +25,7 @@ import org.eclipse.che.ide.api.icon.Icon;
 import org.eclipse.che.ide.api.icon.IconRegistry;
 import org.eclipse.che.ide.api.keybinding.KeyBindingAgent;
 import org.eclipse.che.ide.api.keybinding.KeyBuilder;
-import org.eclipse.che.ide.ext.java.client.action.FileStructureAction;
-import org.eclipse.che.ide.ext.java.client.action.FindUsagesAction;
-import org.eclipse.che.ide.ext.java.client.action.MarkDirAsSourceAction;
-import org.eclipse.che.ide.ext.java.client.action.MarkDirectoryAsGroup;
-import org.eclipse.che.ide.ext.java.client.action.NewJavaSourceFileAction;
-import org.eclipse.che.ide.ext.java.client.action.NewPackageAction;
-import org.eclipse.che.ide.ext.java.client.action.OpenDeclarationAction;
-import org.eclipse.che.ide.ext.java.client.action.OpenImplementationAction;
-import org.eclipse.che.ide.ext.java.client.action.OrganizeImportsAction;
-import org.eclipse.che.ide.ext.java.client.action.ParametersHintsAction;
-import org.eclipse.che.ide.ext.java.client.action.ProjectClasspathAction;
-import org.eclipse.che.ide.ext.java.client.action.QuickDocumentationAction;
-import org.eclipse.che.ide.ext.java.client.action.QuickFixAction;
-import org.eclipse.che.ide.ext.java.client.action.UnmarkDirAsSourceAction;
+import org.eclipse.che.ide.ext.java.client.action.*;
 import org.eclipse.che.ide.ext.java.client.refactoring.move.CutJavaSourceAction;
 import org.eclipse.che.ide.ext.java.client.refactoring.move.MoveAction;
 import org.eclipse.che.ide.ext.java.client.refactoring.rename.RenameRefactoringAction;
@@ -87,7 +74,8 @@ public class JavaExtension {
                                 OpenDeclarationAction openDeclarationAction,
                                 OpenImplementationAction openImplementationAction,
                                 FindUsagesAction findUsagesAction,
-                                ParametersHintsAction parametersHintsAction) {
+                                ParametersHintsAction parametersHintsAction,
+                                OverridableMethodsAction overridableMethodsAction) {
 
         DefaultActionGroup newGroup = (DefaultActionGroup)actionManager.getAction(GROUP_FILE_NEW);
 
@@ -121,6 +109,7 @@ public class JavaExtension {
         actionManager.registerAction("javaCutRefactoring", cutAction);
         actionManager.registerAction("javaFindUsages", findUsagesAction);
         actionManager.registerAction("javaClassStructure", fileStructureAction);
+        actionManager.registerAction("javaOverridableMethods", overridableMethodsAction);
         actionManager.registerAction("organizeImports", organizeImportsAction);
         actionManager.registerAction("parametersInfo", parametersHintsAction);
         actionManager.registerAction("quickFix", quickFixAction);
@@ -132,6 +121,7 @@ public class JavaExtension {
         assistantGroup.add(openImplementationAction, new Constraints(Anchor.BEFORE, GROUP_ASSISTANT_REFACTORING));
         assistantGroup.add(fileStructureAction, new Constraints(Anchor.BEFORE, GROUP_ASSISTANT_REFACTORING));
         assistantGroup.add(findUsagesAction, new Constraints(Anchor.BEFORE, GROUP_ASSISTANT_REFACTORING));
+        assistantGroup.add(overridableMethodsAction, new Constraints(Anchor.BEFORE, GROUP_ASSISTANT_REFACTORING));
 
         //Configure Build Path action group
         actionManager.registerAction("markDirectoryAsSourceGroup", markDirectoryAsGroup);
@@ -153,6 +143,7 @@ public class JavaExtension {
         editorContextMenuGroup.add(openDeclarationAction, new Constraints(Anchor.AFTER, "quickFix"));
         editorContextMenuGroup.add(refactorGroup, new Constraints(Anchor.AFTER, "openJavaDeclaration"));
         editorContextMenuGroup.add(fileStructureAction, new Constraints(Anchor.AFTER, GROUP_ASSISTANT_REFACTORING));
+        editorContextMenuGroup.add(overridableMethodsAction, new Constraints(Anchor.AFTER, "javaClassStructure"));
 
         if (UserAgent.isMac()) {
             keyBinding.getGlobal().addKey(new KeyBuilder().alt().control().charCode('b').build(), "openImplementation");
