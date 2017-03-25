@@ -465,4 +465,7 @@ public interface JavaLocalizationConstant extends Messages {
 
     @Key("overridable.methods.action.description")
     String overridableMethodsActionDescription();
+
+    @Key("extractMethod.subpackages")
+    String extractMethodSubpackages();
 }
