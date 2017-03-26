@@ -49,8 +49,8 @@ public class OverridableMethodsImpl extends Window implements OverridableMethods
 
     // TODO_cemal implement the whole class
 
-    private final NodeFactory nodeFactory;
-    private final Tree tree;
+    private final NodeFactory nodeFactory = null;
+    private final Tree tree = null;
 
     private OverridableMethods.ActionDelegate delegate;
 
@@ -58,7 +58,7 @@ public class OverridableMethodsImpl extends Window implements OverridableMethods
     DockLayoutPanel treeContainer;
 
     @UiField(provided = true)
-    final JavaLocalizationConstant locale;
+    final JavaLocalizationConstant locale = null;
 
     @Inject
     public OverridableMethodsImpl(NodeFactory nodeFactory, JavaLocalizationConstant locale) {

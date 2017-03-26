@@ -468,4 +468,7 @@ public interface JavaLocalizationConstant extends Messages {
 
     @Key("extractMethod.subpackages")
     String extractMethodSubpackages();
+
+    @Key("failed.to.extractMethod")
+    String failedToExtractMethod();
 }

@@ -13,22 +13,7 @@ package org.eclipse.che.ide.ext.java.client.refactoring.service;
 import com.google.inject.ImplementedBy;
 
 import org.eclipse.che.api.promises.client.Promise;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ChangeCreationResult;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ChangeEnabledState;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ChangePreview;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.CreateMoveRefactoring;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.CreateRenameRefactoring;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.LinkedRenameRefactoringApply;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.MoveSettings;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringChange;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringPreview;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringResult;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringSession;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringStatus;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RenameRefactoringSession;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RenameSettings;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ReorgDestination;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ValidateNewName;
+import org.eclipse.che.ide.ext.java.shared.dto.refactoring.*;
 
 /**
  * Provides methods which allow send requests to special refactoring service to do refactoring.
@@ -54,6 +39,13 @@ public interface RefactoringServiceClient {
      * @return an instance of refactoring session id
      */
     Promise<RenameRefactoringSession> createRenameRefactoring(CreateRenameRefactoring settings);
+
+    /**
+     * Creates extract method refactoring session.
+     * @param settings extract method settings
+     * @return an instance of refactoring session id
+     */
+    Promise<ExtractMethodRefactoringSession> createExtractMethodRefactoring(CreateExtractMethodRefactoring settings);
 
     /**
      * Apply linked mode rename refactoring.

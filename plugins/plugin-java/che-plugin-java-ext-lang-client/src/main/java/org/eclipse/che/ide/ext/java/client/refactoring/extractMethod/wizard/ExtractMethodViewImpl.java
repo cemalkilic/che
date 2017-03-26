@@ -80,6 +80,16 @@ public class ExtractMethodViewImpl extends Window implements ExtractMethodView {
     }
 
     @Override
+    public boolean isDeclareStatic() {
+        return declareStatic.getValue();
+    }
+
+    @Override
+    public String getFilePatterns() {
+        return null;
+    }
+
+    @Override
     public boolean isDeclareVarArgs() {
         return declareVarArgs.getValue();
     }
@@ -88,8 +98,8 @@ public class ExtractMethodViewImpl extends Window implements ExtractMethodView {
 
 
     private ActionDelegate delegate;
-    /*private Button up;
-    private Button down;*/
+    private Button accept;
+    private Button preview;
 
     @Inject
     public ExtractMethodViewImpl(JavaLocalizationConstant locale,
@@ -152,7 +162,7 @@ public class ExtractMethodViewImpl extends Window implements ExtractMethodView {
 
 
     /** {@inheritDoc} */
-    public void setOldName(String name) {
+    public void setName(String name) {
         methodName.setText(name);
     }
 
@@ -167,6 +177,21 @@ public class ExtractMethodViewImpl extends Window implements ExtractMethodView {
     public void showStatusMessage(RefactoringStatus status) {
         errorLabel.getElement().getStyle().setColor(Style.getMainFontColor());
         showMessage(status);
+    }
+
+    @Override
+    public void setEnablePreviewButton(boolean isEnable) {
+        preview.setVisible(isEnable);
+    }
+
+    @Override
+    public void setEnableAcceptButton(boolean isEnable) {
+        accept.setVisible(isEnable);
+    }
+
+    @Override
+    public void showErrorMessage(RefactoringStatus status) {
+
     }
 
     @Override

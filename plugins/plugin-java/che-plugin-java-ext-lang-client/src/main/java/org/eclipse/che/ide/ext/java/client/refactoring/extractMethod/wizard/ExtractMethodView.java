@@ -25,9 +25,35 @@ interface ExtractMethodView extends View<ExtractMethodView.ActionDelegate> {
 
     void showStatusMessage(RefactoringStatus status);
 
+    void setEnablePreviewButton(boolean isEnable);
+
+    /**
+     * Set enable scope of the Accept button.
+     *
+     * @param isEnable
+     *         enable state of scope property
+     */
+    void setEnableAcceptButton(boolean isEnable);
+
+    /**
+     * Show error message into bottom of view.
+     *
+     * @param status
+     *         status of error move operation
+     */
+    void showErrorMessage(RefactoringStatus status);
+
+    /** Set empty text into error label */
+    void clearErrorLabel();
+
     boolean isDeclareVarArgs();
 
     boolean isFoldParameters();
+
+    boolean isDeclareStatic();
+
+    String getFilePatterns();
+
 
 
     interface ActionDelegate {
