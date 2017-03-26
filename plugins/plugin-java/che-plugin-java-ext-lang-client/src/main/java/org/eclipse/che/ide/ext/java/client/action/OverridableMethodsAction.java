@@ -30,8 +30,8 @@ public class OverridableMethodsAction extends JavaEditorAction{
 
     private final OverridableMethodsPresenter overridableMethodsPresenter;
     private final EditorAgent editorAgent;
-    
-	@Inject
+
+    @Inject
     public OverridableMethodsAction(OverridableMethodsPresenter overridableMethodsPresenter,
                                     JavaLocalizationConstant locale,
                                     EditorAgent editorAgent,
@@ -48,9 +48,9 @@ public class OverridableMethodsAction extends JavaEditorAction{
 
     }
 
-    /** {@inheritDoc} */ 
-    // TODO_cemal show the OverridableMethodsPresenter dialog
+    /** {@inheritDoc} */
     @Override
     public void actionPerformed(ActionEvent e) {
+        overridableMethodsPresenter.show(editorAgent.getActiveEditor());
     }
 }
