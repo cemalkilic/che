@@ -26,9 +26,11 @@ import org.eclipse.che.ide.api.icon.IconRegistry;
 import org.eclipse.che.ide.api.keybinding.KeyBindingAgent;
 import org.eclipse.che.ide.api.keybinding.KeyBuilder;
 import org.eclipse.che.ide.ext.java.client.action.*;
+import org.eclipse.che.ide.ext.java.client.refactoring.extractMethod.ExtractMethodRefactoringAction;
 import org.eclipse.che.ide.ext.java.client.refactoring.move.CutJavaSourceAction;
 import org.eclipse.che.ide.ext.java.client.refactoring.move.MoveAction;
 import org.eclipse.che.ide.ext.java.client.refactoring.rename.RenameRefactoringAction;
+import org.eclipse.che.ide.ext.java.client.refactoring.extractMethod.ExtractMethodRefactoringAction;
 import org.eclipse.che.ide.ext.java.shared.Constants;
 import org.eclipse.che.ide.util.browser.UserAgent;
 import org.eclipse.che.ide.util.input.KeyCodeMap;
@@ -69,6 +71,7 @@ public class JavaExtension {
                                 MarkDirectoryAsGroup markDirectoryAsGroup,
                                 OrganizeImportsAction organizeImportsAction,
                                 RenameRefactoringAction renameRefactoringAction,
+                                ExtractMethodRefactoringAction extractMethodRefactoringAction,
                                 QuickDocumentationAction quickDocumentationAction,
                                 QuickFixAction quickFixAction,
                                 OpenDeclarationAction openDeclarationAction,
@@ -99,6 +102,7 @@ public class JavaExtension {
         refactorGroup.addSeparator();
         refactorGroup.add(moveAction);
         refactorGroup.add(renameRefactoringAction);
+        refactorGroup.add(extractMethodRefactoringAction);
         assistantGroup.add(refactorGroup, new Constraints(Anchor.BEFORE, "updateDependency"));
 
         actionManager.registerAction("showQuickDoc", quickDocumentationAction);
@@ -106,6 +110,7 @@ public class JavaExtension {
         actionManager.registerAction("openImplementation", openImplementationAction);
         actionManager.registerAction("javaRenameRefactoring", renameRefactoringAction);
         actionManager.registerAction("javaMoveRefactoring", moveAction);
+        actionManager.registerAction("javaExtractMethodRefactoring", renameRefactoringAction);
         actionManager.registerAction("javaCutRefactoring", cutAction);
         actionManager.registerAction("javaFindUsages", findUsagesAction);
         actionManager.registerAction("javaClassStructure", fileStructureAction);
