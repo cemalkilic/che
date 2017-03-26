@@ -30,7 +30,6 @@ import org.eclipse.che.ide.ext.java.client.refactoring.extractMethod.ExtractMeth
 import org.eclipse.che.ide.ext.java.client.refactoring.move.CutJavaSourceAction;
 import org.eclipse.che.ide.ext.java.client.refactoring.move.MoveAction;
 import org.eclipse.che.ide.ext.java.client.refactoring.rename.RenameRefactoringAction;
-import org.eclipse.che.ide.ext.java.client.refactoring.extractMethod.ExtractMethodRefactoringAction;
 import org.eclipse.che.ide.ext.java.shared.Constants;
 import org.eclipse.che.ide.util.browser.UserAgent;
 import org.eclipse.che.ide.util.input.KeyCodeMap;
