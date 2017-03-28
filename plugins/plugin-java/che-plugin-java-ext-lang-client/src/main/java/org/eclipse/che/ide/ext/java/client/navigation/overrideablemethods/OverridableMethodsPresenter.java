@@ -74,20 +74,67 @@ public class OverridableMethodsPresenter implements OverridableMethods.ActionDel
      *         the active editor
      */
     public void show(EditorPartPresenter editorPartPresenter) {
+        loader.show();
+        view.setTitle(editorPartPresenter.getEditorInput().getFile().getName());
+
+        if (!(editorPartPresenter instanceof TextEditor)) {
+            Log.error(getClass(), "Open Declaration support only TextEditor as editor");
+            return;
+        }
+
+        activeEditor = ((TextEditor)editorPartPresenter);
+        cursorOffset = activeEditor.getCursorOffset();
+        VirtualFile file = activeEditor.getEditorInput().getFile();
+
+        if (file instanceof Resource) {
+            final Optional<Project> project = ((Resource)file).getRelatedProject();
+
+            final Optional<Resource> srcFolder = ((Resource)file).getParentWithMarker(SourceFolderMarker.ID);
+
+            if (!srcFolder.isPresent()) {
+                return;
+            }
+
+            final String fqn = JavaUtil.resolveFQN((Container)srcFolder.get(), (Resource)file);
+
+
+            javaNavigationService.getCompilationUnit(project.get().getLocation(), fqn, true).then(
+                    new Operation<CompilationUnit>() {
+                        @Override
+                        public void apply(CompilationUnit unit) throws OperationException {
+                            view.setMethods(unit);
+                            loader.hide();
+                            view.show();
+                            Log.info(getClass(), "apply icinde");
+                        }
+                    }).catchError(new Operation<PromiseError>() {
+                @Override
+                public void apply(PromiseError arg) throws OperationException {
+                    Log.error(getClass(), arg.getMessage());
+                    loader.hide();
+                }
+            });
+
+        }
     }
 
+    // TODO_cemal implement actionPerformed
+    // when clicked, create the selected method in current file
     /** {@inheritDoc} */
     @Override
     public void actionPerformed(final Member member) {
+
     }
 
     @Override
     public void onEscapeClicked() {
-    }
-
-    private void setCursorPosition(Region region) {
+        activeEditor.setFocus();
+        setCursor(activeEditor, cursorOffset);
     }
 
     private void setCursor(EditorPartPresenter editor, int offset) {
+        if (editor instanceof TextEditor) {
+            ((TextEditor)editor).getDocument().setSelectedRange(LinearRange.createWithStart(offset).andLength(0), true);
+        }
     }
 }
