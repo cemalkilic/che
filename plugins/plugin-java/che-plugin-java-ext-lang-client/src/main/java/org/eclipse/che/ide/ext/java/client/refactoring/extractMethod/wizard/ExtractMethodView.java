@@ -54,6 +54,7 @@ interface ExtractMethodView extends View<ExtractMethodView.ActionDelegate> {
 
     String getFilePatterns();
 
+    void hide();
 
 
     interface ActionDelegate {
