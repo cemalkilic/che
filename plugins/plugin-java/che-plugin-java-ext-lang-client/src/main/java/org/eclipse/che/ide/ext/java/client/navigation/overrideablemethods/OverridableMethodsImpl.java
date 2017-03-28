@@ -18,18 +18,19 @@ import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.eclipse.che.ide.api.data.tree.Node;
 import org.eclipse.che.ide.api.data.tree.NodeInterceptor;
 import org.eclipse.che.ide.ext.java.client.JavaLocalizationConstant;
+import org.eclipse.che.ide.ext.java.client.dto.DtoClientImpls;
 import org.eclipse.che.ide.ext.java.client.navigation.factory.NodeFactory;
 import org.eclipse.che.ide.ext.java.shared.dto.model.CompilationUnit;
 import org.eclipse.che.ide.ext.java.shared.dto.model.Type;
 import org.eclipse.che.ide.ui.smartTree.*;
 import org.eclipse.che.ide.ui.window.Window;
+import org.eclipse.che.ide.util.loging.Log;
 
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
@@ -47,7 +48,6 @@ public class OverridableMethodsImpl extends Window implements OverridableMethods
 
     private static OverridableMethodsImplUiBinder UI_BINDER = GWT.create(OverridableMethodsImplUiBinder.class);
 
-    // TODO_cemal implement the whole class
 
     private final NodeFactory nodeFactory;
     private final Tree tree;
@@ -60,30 +60,86 @@ public class OverridableMethodsImpl extends Window implements OverridableMethods
     @UiField(provided = true)
     final JavaLocalizationConstant locale;
 
+    private Predicate<Node> LEAFS = new Predicate<Node>() {
+        @Override
+        public boolean apply(Node input) {
+            return input.isLeaf();
+        }
+    };
+
     @Inject
     public OverridableMethodsImpl(NodeFactory nodeFactory, JavaLocalizationConstant locale) {
+        super(false);
+        this.nodeFactory = nodeFactory;
+        this.locale = locale;
+        setWidget(UI_BINDER.createAndBindUi(this));
 
+        // storage for nodes
+        NodeStorage storage = new NodeStorage(new NodeUniqueKeyProvider() {
+            @Override
+            public String getKey(@NotNull Node item) {
+                return String.valueOf(item.hashCode());
+            }
+        });
+
+        // loader for nodes
+        NodeLoader loader = new NodeLoader(Collections.<NodeInterceptor>emptySet());
+
+        tree = new Tree(storage, loader);
+        tree.setAutoExpand(false);
+        tree.getSelectionModel().setSelectionMode(SINGLE);
+
+        KeyboardNavigationHandler handler = new KeyboardNavigationHandler() {
+            @Override
+            public void onEnter(NativeEvent evt) {
+                hide();
+            }
+        };
+
+        tree.addDomHandler(new DoubleClickHandler() {
+            @Override
+            public void onDoubleClick(DoubleClickEvent event) {
+                if (all(tree.getSelectionModel().getSelectedNodes(), LEAFS)) {
+                    hide();
+                }
+            }
+        }, DoubleClickEvent.getType());
+
+        handler.bind(tree);
+
+        treeContainer.add(tree);
     }
 
+
     /** {@inheritDoc} */
+    // TODO_cemal implement the listing function
     @Override
     public void setMethods(CompilationUnit compilationUnit) {
+
 
     }
 
     /** {@inheritDoc} */
     @Override
     public void close() {
+        hide();
     }
 
     /** {@inheritDoc} */
     @Override
     public void show() {
+        super.show(tree);
+        if (!tree.getRootNodes().isEmpty()) {
+            tree.getSelectionModel().select(tree.getRootNodes().get(0), false);
+        }
+        tree.expandAll();
     }
 
     /** {@inheritDoc} */
     @Override
     public void hide() {
+        super.hide();
+        delegate.onEscapeClicked();
     }
 
     /** {@inheritDoc} */
