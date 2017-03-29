@@ -116,9 +116,9 @@ public class OverridableMethodsImpl extends Window implements OverridableMethods
     @Override
     public void setMethods(CompilationUnit compilationUnit) {
         tree.getNodeStorage().clear();
-        Log.info(getClass(), "cu.getTypes() ", compilationUnit.getTypes());
-        Log.info(getClass(), "cu.getTypes().get(0)", compilationUnit.getTypes().get(0));
-        Log.info(getClass(), "cu.getImports", compilationUnit.getImports());
+        //Log.info(getClass(), "cu.getTypes() ", compilationUnit.getTypes());
+        //Log.info(getClass(), "cu.getTypes().get(0)", compilationUnit.getTypes().get(0));
+       // Log.info(getClass(), "cu.getImports", compilationUnit.getImports());
 
         Log.info(getClass(), "compilationUnit.getSuperTypes(): ", compilationUnit.getSuperTypes());
         for(Type t: compilationUnit.getSuperTypes()){

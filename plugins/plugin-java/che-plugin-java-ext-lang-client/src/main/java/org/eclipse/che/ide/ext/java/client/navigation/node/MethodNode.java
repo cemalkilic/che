@@ -21,6 +21,7 @@ import org.eclipse.che.ide.ext.java.client.navigation.filestructure.FileStructur
 import org.eclipse.che.ide.ext.java.client.util.Flags;
 import org.eclipse.che.ide.ext.java.shared.dto.model.Method;
 import org.eclipse.che.ide.ui.smartTree.presentation.NodePresentation;
+import org.eclipse.che.ide.util.loging.Log;
 import org.vectomatic.dom.svg.ui.SVGResource;
 
 import javax.validation.constraints.NotNull;
@@ -61,7 +62,13 @@ public class MethodNode extends AbstractPresentationNode implements HasAction {
     /** {@inheritDoc} */
     @Override
     public void updatePresentation(@NotNull NodePresentation presentation) {
-        StringBuilder presentableName = new StringBuilder(method.getLabel() + " : " + method.getReturnType());
+        StringBuilder presentableName = new StringBuilder();
+        // TODO_cemal update the class, so private methods will not
+        // be showed in overridable methods window
+//        if (!Flags.isPrivate(method.getFlags())) {
+            presentableName.append(method.getLabel() + " : " + method.getReturnType());
+//        }
+
         if (showingInheritedMembers) {
             String path = method.getRootPath();
             String className = method.isBinary() ? path.substring(path.lastIndexOf('.') + 1)
