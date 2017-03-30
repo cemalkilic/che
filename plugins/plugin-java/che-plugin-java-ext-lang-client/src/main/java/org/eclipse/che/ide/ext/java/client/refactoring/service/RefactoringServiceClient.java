@@ -40,12 +40,12 @@ public interface RefactoringServiceClient {
      */
     Promise<RenameRefactoringSession> createRenameRefactoring(CreateRenameRefactoring settings);
 
-//    /**
-//     * Creates extract method refactoring session.
-//     * @param settings extract method settings
-//     * @return an instance of refactoring session id
-//     */
-//    Promise<ExtractMethodRefactoringSession> createExtractMethodRefactoring(CreateExtractMethodRefactoring settings);
+    /**
+     * Creates extract method refactoring session.
+     * @param settings extract method settings
+     * @return an instance of refactoring session id
+     */
+    Promise<ExtractMethodRefactoringSession> createExtractMethodRefactoring(CreateExtractMethodRefactoring settings);
 
     /**
      * Apply linked mode rename refactoring.
@@ -136,14 +136,14 @@ public interface RefactoringServiceClient {
      */
     Promise<Void> setRenameSettings(RenameSettings settings);
 
-//    /**
-//     * Set extract method refactoring wizard setting.
-//     *
-//     * @param settings
-//     *         the extract method settings
-//     * @return empty promise result
-//     */
-//    Promise<Void> setExtractMethodSettings(ExtractMethodSettings settings);
+    /**
+     * Set extract method refactoring wizard setting.
+     *
+     * @param settings
+     *         the extract method settings
+     * @return empty promise result
+     */
+    Promise<Void> setExtractMethodSettings(ExtractMethodSettings settings);
 
     /**
      * Make reindex for the project.

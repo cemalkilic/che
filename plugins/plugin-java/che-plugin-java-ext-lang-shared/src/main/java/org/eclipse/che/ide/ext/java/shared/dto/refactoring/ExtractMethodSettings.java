@@ -32,7 +32,7 @@ public interface ExtractMethodSettings extends RefactoringSession {
 
     void setFoldParemeters(boolean foldParemeters);
 
-    boolean declareVarArgs();
+    boolean isDeclareVarArgs();
 
     void setDeclareVarArgs(boolean declareVarArgs);
 

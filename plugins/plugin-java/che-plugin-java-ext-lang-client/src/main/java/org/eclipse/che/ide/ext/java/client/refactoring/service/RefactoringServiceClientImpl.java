@@ -74,10 +74,16 @@ final class RefactoringServiceClientImpl implements RefactoringServiceClient {
                                   .send(unmarshallerFactory.newUnmarshaller(RenameRefactoringSession.class));
     }
 
-//    @Override
-//    public Promise<ExtractMethodRefactoringSession> createExtractMethodRefactoring(CreateExtractMethodRefactoring settings) {
-//        return null;
-//    }
+    @Override
+    public Promise<ExtractMethodRefactoringSession> createExtractMethodRefactoring(CreateExtractMethodRefactoring settings) {
+        final String url = appContext.getDevMachine().getWsAgentBaseUrl() + pathToService + "extractMethod/create";
+        return asyncRequestFactory.createPostRequest(url, settings)
+                .header(ACCEPT, APPLICATION_JSON)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .loader(loader)
+                .send(unmarshallerFactory.newUnmarshaller(ExtractMethodRefactoringSession.class));
+    }
+
 
     /** {@inheritDoc} */
     @Override
@@ -198,10 +204,16 @@ final class RefactoringServiceClientImpl implements RefactoringServiceClient {
                                   .send();
     }
 
-//    @Override
-//    public Promise<Void> setExtractMethodSettings(ExtractMethodSettings settings) {
-//        return null;
-//    }
+    @Override
+    public Promise<Void> setExtractMethodSettings(ExtractMethodSettings settings) {
+        final String url = appContext.getDevMachine().getWsAgentBaseUrl() + pathToService + "set/extractMethod/settings";
+
+        return asyncRequestFactory.createPostRequest(url, settings)
+                .header(ACCEPT, APPLICATION_JSON)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .loader(loader)
+                .send();
+    }
 
     @Override
     public Promise<Void> reindexProject(String projectPath) {

@@ -15,13 +15,15 @@ import com.google.inject.ImplementedBy;
 import org.eclipse.che.ide.api.mvp.View;
 import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringStatus;
 
-//@ImplementedBy(RenameViewImpl.class)
+@ImplementedBy(ExtractMethodViewImpl.class)
 interface ExtractMethodView extends View<ExtractMethodView.ActionDelegate> {
 
     /** Returns new name */
     String getName();
 
     void setFocus();
+
+    void show();
 
     void showStatusMessage(RefactoringStatus status);
 

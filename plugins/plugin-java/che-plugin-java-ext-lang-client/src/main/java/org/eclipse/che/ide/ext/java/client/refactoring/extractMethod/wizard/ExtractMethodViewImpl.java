@@ -120,9 +120,6 @@ public class ExtractMethodViewImpl extends Window implements ExtractMethodView {
         });
     }
 
-    /*private void createButtons(JavaLocalizationConstant locale) {
-        up = createButton(locale.)
-    }*/
 
     /** {@inheritDoc} */
     @Override
