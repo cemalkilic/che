@@ -26,6 +26,7 @@ import org.eclipse.che.ide.api.event.ActivePartChangedHandler;
 import org.eclipse.che.ide.api.filetypes.FileTypeRegistry;
 import org.eclipse.che.ide.ext.java.client.JavaLocalizationConstant;
 import org.eclipse.che.ide.ext.java.client.refactoring.rename.JavaRefactoringRename;
+import org.eclipse.che.ide.ext.java.jdt.text.edits.TextEdit;
 
 //import java.util.List;
 
@@ -59,6 +60,24 @@ public class ExtractMethodRefactoringAction extends AbstractPerspectiveAction im
 
     @Override
     public void onActivePartChanged(ActivePartChangedEvent event) {
+        editorInFocus = event.getActivePart() instanceof EditorPartPresenter;
+    }
+
+    @Override
+    public void updateInPerspective(ActionEvent event) {
+        event.getPresentation().setVisible(true);
+
+        if (editorInFocus) {
+            final EditorPartPresenter editorPart = editorAgent.getActiveEditor();
+            if (editorPart == null || !(editorPart instanceof TextEditor)) {
+                event.getPresentation().setEnabled(false);
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
         if (editorInFocus) {
             final EditorPartPresenter editorPart = editorAgent.getActiveEditor();
             if (editorPart == null || !(editorPart instanceof TextEditor)) {
@@ -67,15 +86,6 @@ public class ExtractMethodRefactoringAction extends AbstractPerspectiveAction im
 
             javaRefactoringExtractMethod.refactor((TextEditor)editorPart);
         }
-    }
-
-    @Override
-    public void updateInPerspective(ActionEvent event) {
-
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
 
     }
 }

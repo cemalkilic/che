@@ -10,11 +10,13 @@
  *******************************************************************************/
 package org.eclipse.che.ide.ext.java.shared.dto.refactoring;
 
+import org.eclipse.che.dto.shared.DTO;
+
 /**
  * Created by awesome on 26.03.17.
  */
+@DTO
 public interface ExtractMethodSettings extends RefactoringSession {
-
 
     boolean isUpdateQualifiedNames();
 
@@ -28,21 +30,14 @@ public interface ExtractMethodSettings extends RefactoringSession {
 
     void setDeclareStatic(boolean declareStatic);
 
-    boolean foldParemeters();
-
-    void setFoldParemeters(boolean foldParemeters);
-
-    boolean isDeclareVarArgs();
+    boolean isFoldParameters();
 
     void setDeclareVarArgs(boolean declareVarArgs);
 
-    int getMachStrategy();
+    void setFoldParameters(boolean foldParameters);
 
-    /**
-     *
-     * @param strategy must be one of {@link org.eclipse.che.ide.ext.java.shared.dto.refactoring.RenameSettings.MachStrategy} values.
-     */
-    void setMachStrategy(int strategy);
+    boolean isDeclareVarArgs();
+
 
     //ITextUpdating
 
@@ -54,16 +49,4 @@ public interface ExtractMethodSettings extends RefactoringSession {
 
     void setUpdateTextualMatches(boolean update);
 
-
-    enum MachStrategy {
-        EXACT(1), EMBEDDED(2), SUFFIX(3);
-        private int value;
-        MachStrategy(int i) {
-            value = i;
-        }
-
-        public int getValue() {
-            return value;
-        }
-    }
 }
