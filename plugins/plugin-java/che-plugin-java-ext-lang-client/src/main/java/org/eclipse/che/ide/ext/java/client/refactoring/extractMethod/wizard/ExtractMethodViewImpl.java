@@ -15,17 +15,9 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Timer;
 //import com.google.gwt.user.client.ui.*;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.*;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -44,15 +36,13 @@ public class ExtractMethodViewImpl extends Window implements ExtractMethodView {
 
     }
 
-    private static ExtractMethodViewImplUiBinder UI_Bınder = GWT.create(ExtractMethodViewImplUiBinder.class);
+    private static ExtractMethodViewImplUiBinder UI_BINDER = GWT.create(ExtractMethodViewImplUiBinder.class);
 
     private final JavaResources javaResources;
 
     @UiField(provided = true)
     final JavaLocalizationConstant locale;
 
-    @UiField
-    FlowPanel headerPanelToHide;
     @UiField
     TextBox methodName;
     @UiField
@@ -72,7 +62,7 @@ public class ExtractMethodViewImpl extends Window implements ExtractMethodView {
     @UiField
     SimplePanel icon;
     @UiField
-    Label       errorLabel;
+    Label errorLabel;
 
     @Override
     public boolean isFoldParameters() {
@@ -107,7 +97,7 @@ public class ExtractMethodViewImpl extends Window implements ExtractMethodView {
         this.locale = locale;
         this.javaResources = javaResorces;
 
-        setWidget(UI_Bınder.createAndBindUi(this));
+        setWidget(UI_BINDER.createAndBindUi(this));
 
         //createButtons(locale);
 
@@ -144,7 +134,7 @@ public class ExtractMethodViewImpl extends Window implements ExtractMethodView {
 
         super.onClose();
     }
-
+//
     /** {@inheritDoc} */
     @Override
     public void setDelegate(ActionDelegate delegate) {

@@ -25,6 +25,7 @@ import org.eclipse.che.ide.api.event.ActivePartChangedEvent;
 import org.eclipse.che.ide.api.event.ActivePartChangedHandler;
 import org.eclipse.che.ide.api.filetypes.FileTypeRegistry;
 import org.eclipse.che.ide.ext.java.client.JavaLocalizationConstant;
+import org.eclipse.che.ide.ext.java.client.refactoring.extractMethod.wizard.ExtractMethodPresenter;
 import org.eclipse.che.ide.ext.java.client.refactoring.rename.JavaRefactoringRename;
 import org.eclipse.che.ide.ext.java.jdt.text.edits.TextEdit;
 
@@ -37,12 +38,14 @@ public class ExtractMethodRefactoringAction extends AbstractPerspectiveAction im
     private final EditorAgent           editorAgent;
     private final AppContext            appContext;
     private final FileTypeRegistry      fileTypeRegistry;
+    private final ExtractMethodPresenter extractMethodPresenter;
     JavaRefactoringExtractMethod javaRefactoringExtractMethod;
 
     private boolean editorInFocus;
 
     @Inject
     public ExtractMethodRefactoringAction(EditorAgent editorAgent,
+                                          ExtractMethodPresenter extractMethodPresenter,
                                           EventBus eventBus,
                                           JavaLocalizationConstant locale,
                                           JavaRefactoringExtractMethod javaRefactoringExtractMethod,
@@ -50,6 +53,7 @@ public class ExtractMethodRefactoringAction extends AbstractPerspectiveAction im
                                           FileTypeRegistry fileTypeRegistry) {
         super(null, locale.extractMethodRefactoringActionName(),locale.extractMethodRefactoringActionDescription());
         this.editorAgent = editorAgent;
+        this.extractMethodPresenter = extractMethodPresenter;
         this.javaRefactoringExtractMethod = javaRefactoringExtractMethod;
         this.appContext = appContext;
         this.fileTypeRegistry = fileTypeRegistry;
@@ -78,14 +82,14 @@ public class ExtractMethodRefactoringAction extends AbstractPerspectiveAction im
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        extractMethodPresenter.show();
         if (editorInFocus) {
             final EditorPartPresenter editorPart = editorAgent.getActiveEditor();
             if (editorPart == null || !(editorPart instanceof TextEditor)) {
                 return;
             }
 
-            javaRefactoringExtractMethod.refactor((TextEditor)editorPart);
+            javaRefactoringExtractMethod.refactor((TextEditor) editorPart);
         }
-
     }
 }
