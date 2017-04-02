@@ -50,6 +50,8 @@ public class OverridableMethodsPresenter implements OverridableMethods.ActionDel
     private final EditorAgent editorAgent;
     private final MessageLoader loader;
 
+    public static boolean OVERRIDABLE_ACTIVE = false;
+
     private TextEditor activeEditor;
     private int        cursorOffset;
 
@@ -102,6 +104,7 @@ public class OverridableMethodsPresenter implements OverridableMethods.ActionDel
                     new Operation<CompilationUnit>() {
                         @Override
                         public void apply(CompilationUnit unit) throws OperationException {
+                            OVERRIDABLE_ACTIVE = true;
                             view.setMethods(unit);
                             loader.hide();
                             view.show();

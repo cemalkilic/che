@@ -18,6 +18,7 @@ import org.eclipse.che.ide.api.data.tree.HasAction;
 import org.eclipse.che.ide.api.data.tree.Node;
 import org.eclipse.che.ide.ext.java.client.JavaResources;
 import org.eclipse.che.ide.ext.java.client.navigation.filestructure.FileStructurePresenter;
+import org.eclipse.che.ide.ext.java.client.navigation.overrideablemethods.OverridableMethodsPresenter;
 import org.eclipse.che.ide.ext.java.client.util.Flags;
 import org.eclipse.che.ide.ext.java.shared.dto.model.Field;
 import org.eclipse.che.ide.ui.smartTree.presentation.NodePresentation;
@@ -61,16 +62,33 @@ public class FieldNode extends AbstractPresentationNode implements HasAction {
     /** {@inheritDoc} */
     @Override
     public void updatePresentation(@NotNull NodePresentation presentation) {
-        StringBuilder presentableName = new StringBuilder(field.getElementName());
-        if (isShowInheritedMembers) {
-            String path = field.getRootPath();
-            String className = field.isBinary() ? path.substring(path.lastIndexOf('.') + 1)
-                                                : path.substring(path.lastIndexOf('/') + 1, path.indexOf('.'));
-            presentableName.append(" -> ").append(className);
+        StringBuilder presentableName = new StringBuilder();
+
+        // if this method is not called by Overridable Methods
+        // then it must be called by File Structure
+        // in this case, it should show private members too.
+        if(!OverridableMethodsPresenter.OVERRIDABLE_ACTIVE) {
+            presentableName.append(field.getElementName());
+            if (isShowInheritedMembers) {
+                String path = field.getRootPath();
+                String className = field.isBinary() ? path.substring(path.lastIndexOf('.') + 1)
+                        : path.substring(path.lastIndexOf('/') + 1, path.indexOf('.'));
+                presentableName.append(" -> ").append(className);
+            }
+
+            updatePresentationField(isFromSuper, presentation, presentableName.toString(), resources);
+
+        }
+        // if the Overridable Methods is the caller
+        // then it should not show private members
+        else{
+            if(!Flags.isPrivate(field.getFlags())){
+                presentableName.append(field.getElementName());
+                updatePresentationField(isFromSuper, presentation, presentableName.toString(), resources);
+            }
         }
 
-        updatePresentationField(isFromSuper, presentation, presentableName.toString(), resources);
-
+        // icon should be set
         int flag = field.getFlags();
         SVGResource icon;
         if (Flags.isPublic(flag)) {
@@ -82,6 +100,7 @@ public class FieldNode extends AbstractPresentationNode implements HasAction {
         } else {
             icon = resources.publicMethod();
         }
+
         presentation.setPresentableIcon(icon);
     }
 

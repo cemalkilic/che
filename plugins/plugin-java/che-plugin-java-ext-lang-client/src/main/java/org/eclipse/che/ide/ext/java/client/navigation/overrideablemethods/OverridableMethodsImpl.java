@@ -131,6 +131,7 @@ public class OverridableMethodsImpl extends Window implements OverridableMethods
     @Override
     public void close() {
         hide();
+        OverridableMethodsPresenter.OVERRIDABLE_ACTIVE = false;
     }
 
     /** {@inheritDoc} */
