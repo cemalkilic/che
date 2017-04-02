@@ -21,18 +21,21 @@ import org.eclipse.che.ide.api.editor.EditorAgent;
 import com.google.inject.Singleton;
 import org.eclipse.che.ide.api.editor.EditorPartPresenter;
 import org.eclipse.che.ide.api.editor.OpenEditorCallbackImpl;
+import org.eclipse.che.ide.api.editor.document.Document;
 import org.eclipse.che.ide.api.editor.text.LinearRange;
 import org.eclipse.che.ide.api.editor.texteditor.TextEditor;
 import org.eclipse.che.ide.api.resources.*;
 import org.eclipse.che.ide.ext.java.client.navigation.filestructure.FileStructurePresenter;
 import org.eclipse.che.ide.ext.java.client.navigation.service.JavaNavigationService;
 import org.eclipse.che.ide.ext.java.client.resource.SourceFolderMarker;
+import org.eclipse.che.ide.ext.java.client.util.Flags;
 import org.eclipse.che.ide.ext.java.client.util.JavaUtil;
 import org.eclipse.che.ide.ext.java.shared.JarEntry;
 import org.eclipse.che.ide.ext.java.shared.dto.ClassContent;
 import org.eclipse.che.ide.ext.java.shared.dto.Region;
 import org.eclipse.che.ide.ext.java.shared.dto.model.CompilationUnit;
 import org.eclipse.che.ide.ext.java.shared.dto.model.Member;
+import org.eclipse.che.ide.ext.java.shared.dto.model.Method;
 import org.eclipse.che.ide.resource.Path;
 import org.eclipse.che.ide.ui.loaders.request.LoaderFactory;
 import org.eclipse.che.ide.ui.loaders.request.MessageLoader;
@@ -54,6 +57,7 @@ public class OverridableMethodsPresenter implements OverridableMethods.ActionDel
 
     private TextEditor activeEditor;
     private int        cursorOffset;
+    private Document document;
 
     @Inject
     public OverridableMethodsPresenter(OverridableMethods view,
@@ -125,7 +129,54 @@ public class OverridableMethodsPresenter implements OverridableMethods.ActionDel
     // when clicked, create the selected method in current file
     /** {@inheritDoc} */
     @Override
-    public void actionPerformed(final Member member) {
+    public void actionPerformed(Member member) {
+        this.document = activeEditor.getDocument();
+
+        StringBuilder methodDef = new StringBuilder();
+
+        // only methods can be overridable, not fields
+        // so if the member is not Method, there is nothing to do
+        if(member instanceof Method){
+            Method method = (Method) member;
+
+            // add @override annotation to beginning
+            methodDef.append("@Override\n");
+
+            int flags = method.getFlags();
+
+            // append the modifier
+            if(Flags.isProtected(flags)){
+                methodDef.append("protected ");
+            } else if(Flags.isPublic(flags)){
+                methodDef.append("public ");
+            } else if(Flags.isPackageDefault(flags)){
+                //nothing
+            }
+
+            // append return type
+            methodDef.append(method.getReturnType()).append(" ");
+
+            // append method name and bracket
+            methodDef.append(method.getElementName());
+            methodDef.append("{").append("\n");
+
+            // append the method body as
+            // super.<method_name>();
+            methodDef.append("super.")
+                    .append(method.getElementName())
+                    .append("();");
+
+            // append the closing bracket
+            methodDef.append("}");
+
+
+        }
+        else{
+            // do nothing
+        }
+
+        // select the end of document and
+        // add the created methodDef.
 
     }
 
@@ -134,7 +185,6 @@ public class OverridableMethodsPresenter implements OverridableMethods.ActionDel
         activeEditor.setFocus();
         setCursor(activeEditor, cursorOffset);
     }
-
     private void setCursor(EditorPartPresenter editor, int offset) {
         if (editor instanceof TextEditor) {
             ((TextEditor)editor).getDocument().setSelectedRange(LinearRange.createWithStart(offset).andLength(0), true);
