@@ -22,6 +22,7 @@ import org.eclipse.che.ide.api.data.tree.Node;
 import org.eclipse.che.ide.ext.java.client.JavaResources;
 import org.eclipse.che.ide.ext.java.client.navigation.factory.NodeFactory;
 import org.eclipse.che.ide.ext.java.client.navigation.filestructure.FileStructurePresenter;
+import org.eclipse.che.ide.ext.java.client.navigation.overrideablemethods.OverridableMethodsPresenter;
 import org.eclipse.che.ide.ext.java.client.search.node.NodeComparator;
 import org.eclipse.che.ide.ext.java.client.util.Flags;
 import org.eclipse.che.ide.ext.java.shared.dto.model.CompilationUnit;
@@ -139,12 +140,25 @@ public class TypeNode extends AbstractPresentationNode implements HasAction {
     private void createTypeChildren(List<Node> child, Type type, boolean isFromSuper) {
         for (Method method : type.getMethods()) {
             if (!method.getLabel().startsWith("<")) {
-                child.add(nodeFactory.create(method, isShowInheritedMembers, isFromSuper));
+                if(OverridableMethodsPresenter.OVERRIDABLE_ACTIVE) {
+                    if (!Flags.isPrivate(method.getFlags())) {
+                        child.add(nodeFactory.create(method, isShowInheritedMembers, isFromSuper));
+                    }
+                } else{
+                    child.add(nodeFactory.create(method, isShowInheritedMembers, isFromSuper));
+                }
             }
         }
 
         for (Field field : type.getFields()) {
-            child.add(nodeFactory.create(field, isShowInheritedMembers, isFromSuper));
+            if(OverridableMethodsPresenter.OVERRIDABLE_ACTIVE) {
+                if (!Flags.isPrivate(field.getFlags())) {
+                    child.add(nodeFactory.create(field, isShowInheritedMembers, isFromSuper));
+                }
+            } else{
+                child.add(nodeFactory.create(field, isShowInheritedMembers, isFromSuper));
+            }
+
         }
 
         for (Initializer initializer : type.getInitializers()) {
