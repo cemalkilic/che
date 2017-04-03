@@ -38,6 +38,7 @@ public class MethodNode extends AbstractPresentationNode implements HasAction {
     private final Method                 method;
     private final boolean                isFromSuper;
     private final FileStructurePresenter fileStructurePresenter;
+    private final OverridableMethodsPresenter overridableMethodsPresenter;
 
     private boolean showingInheritedMembers;
 
@@ -46,12 +47,14 @@ public class MethodNode extends AbstractPresentationNode implements HasAction {
                       @Assisted Method method,
                       @Assisted("showInheritedMembers") boolean showInheritedMembers,
                       @Assisted("isFromSuper") boolean isFromSuper,
-                      FileStructurePresenter fileStructurePresenter) {
+                      FileStructurePresenter fileStructurePresenter,
+                      OverridableMethodsPresenter overridableMethodsPresenter) {
         this.resources = resources;
         this.method = method;
         this.isFromSuper = isFromSuper;
         this.fileStructurePresenter = fileStructurePresenter;
         this.showingInheritedMembers = showInheritedMembers;
+        this.overridableMethodsPresenter = overridableMethodsPresenter;
     }
 
     /** {@inheritDoc} */
@@ -104,7 +107,11 @@ public class MethodNode extends AbstractPresentationNode implements HasAction {
     /** {@inheritDoc} */
     @Override
     public void actionPerformed() {
-        fileStructurePresenter.actionPerformed(method);
+        //fileStructurePresenter.actionPerformed(method);
+        overridableMethodsPresenter.actionPerformed(method);
+
+        //TODO_cemal handle which actionPerformed will be called
+
     }
 
     /** {@inheritDoc} */
