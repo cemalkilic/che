@@ -26,27 +26,16 @@ import org.eclipse.che.ide.api.editor.text.TextPosition;
 import org.eclipse.che.ide.api.editor.text.TextRange;
 import org.eclipse.che.ide.api.editor.texteditor.TextEditor;
 import org.eclipse.che.ide.api.resources.*;
-import org.eclipse.che.ide.dto.DtoFactory;
-import org.eclipse.che.ide.editor.orion.client.OrionEditorPresenter;
-import org.eclipse.che.ide.ext.java.client.navigation.filestructure.FileStructurePresenter;
 import org.eclipse.che.ide.ext.java.client.navigation.service.JavaNavigationService;
 import org.eclipse.che.ide.ext.java.client.resource.SourceFolderMarker;
 import org.eclipse.che.ide.ext.java.client.util.Flags;
 import org.eclipse.che.ide.ext.java.client.util.JavaUtil;
-import org.eclipse.che.ide.ext.java.shared.JarEntry;
-import org.eclipse.che.ide.ext.java.shared.dto.ClassContent;
-import org.eclipse.che.ide.ext.java.shared.dto.Region;
 import org.eclipse.che.ide.ext.java.shared.dto.model.CompilationUnit;
 import org.eclipse.che.ide.ext.java.shared.dto.model.Member;
 import org.eclipse.che.ide.ext.java.shared.dto.model.Method;
-import org.eclipse.che.ide.ext.java.shared.dto.model.MethodParameters;
-import org.eclipse.che.ide.resource.Path;
-import org.eclipse.che.ide.rest.DtoUnmarshallerFactory;
-import org.eclipse.che.ide.rest.Unmarshallable;
 import org.eclipse.che.ide.ui.loaders.request.LoaderFactory;
 import org.eclipse.che.ide.ui.loaders.request.MessageLoader;
 import org.eclipse.che.ide.util.loging.Log;
-import org.eclipse.che.plugin.java.server.dto.DtoServerImpls;
 
 /**
  * Created by cemal on 12.03.2017.

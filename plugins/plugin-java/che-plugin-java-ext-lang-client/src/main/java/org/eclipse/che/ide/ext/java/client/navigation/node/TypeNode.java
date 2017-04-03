@@ -22,7 +22,6 @@ import org.eclipse.che.ide.api.data.tree.Node;
 import org.eclipse.che.ide.ext.java.client.JavaResources;
 import org.eclipse.che.ide.ext.java.client.navigation.factory.NodeFactory;
 import org.eclipse.che.ide.ext.java.client.navigation.filestructure.FileStructurePresenter;
-import org.eclipse.che.ide.ext.java.client.navigation.overrideablemethods.OverridableMethods;
 import org.eclipse.che.ide.ext.java.client.navigation.overrideablemethods.OverridableMethodsPresenter;
 import org.eclipse.che.ide.ext.java.client.search.node.NodeComparator;
 import org.eclipse.che.ide.ext.java.client.util.Flags;
