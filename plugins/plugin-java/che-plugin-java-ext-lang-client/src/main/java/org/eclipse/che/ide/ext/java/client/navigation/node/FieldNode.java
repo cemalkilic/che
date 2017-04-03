@@ -122,9 +122,10 @@ public class FieldNode extends AbstractPresentationNode implements HasAction {
     /** {@inheritDoc} */
     @Override
     public void actionPerformed() {
-        //fileStructurePresenter.actionPerformed(field);
-        overridableMethodsPresenter.actionPerformed(field);
-
-        //TODO_cemal handle which actionPerformed will be called
+        if(OverridableMethodsPresenter.OVERRIDABLE_ACTIVE){
+            overridableMethodsPresenter.actionPerformed(field);
+        } else{
+            fileStructurePresenter.actionPerformed(field);
+        }
     }
 }

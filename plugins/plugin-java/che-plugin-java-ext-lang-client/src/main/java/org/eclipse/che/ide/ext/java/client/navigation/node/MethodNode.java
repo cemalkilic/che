@@ -107,11 +107,11 @@ public class MethodNode extends AbstractPresentationNode implements HasAction {
     /** {@inheritDoc} */
     @Override
     public void actionPerformed() {
-        //fileStructurePresenter.actionPerformed(method);
-        overridableMethodsPresenter.actionPerformed(method);
-
-        //TODO_cemal handle which actionPerformed will be called
-
+        if(OverridableMethodsPresenter.OVERRIDABLE_ACTIVE){
+            overridableMethodsPresenter.actionPerformed(method);
+        } else{
+            fileStructurePresenter.actionPerformed(method);
+        }
     }
 
     /** {@inheritDoc} */
