@@ -112,14 +112,12 @@ public class OverridableMethodsImpl extends Window implements OverridableMethods
 
 
     /** {@inheritDoc} */
-    // TODO_cemal implement the listing function
     @Override
     public void setMethods(CompilationUnit compilationUnit) {
         tree.getNodeStorage().clear();
         //Log.info(getClass(), "cu.getTypes() ", compilationUnit.getTypes());
         //Log.info(getClass(), "cu.getTypes().get(0)", compilationUnit.getTypes().get(0));
        // Log.info(getClass(), "cu.getImports", compilationUnit.getImports());
-
         Log.info(getClass(), "compilationUnit.getSuperTypes(): ", compilationUnit.getSuperTypes());
         for(Type t: compilationUnit.getSuperTypes()){
             CompilationUnit cu = DtoClientImpls.CompilationUnitImpl.fromJsonString(t.toString());
@@ -130,8 +128,8 @@ public class OverridableMethodsImpl extends Window implements OverridableMethods
     /** {@inheritDoc} */
     @Override
     public void close() {
-        hide();
         OverridableMethodsPresenter.OVERRIDABLE_ACTIVE = false;
+        hide();
     }
 
     /** {@inheritDoc} */
