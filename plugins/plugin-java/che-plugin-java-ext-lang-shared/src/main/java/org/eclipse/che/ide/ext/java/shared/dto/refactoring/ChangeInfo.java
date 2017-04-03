@@ -38,6 +38,7 @@ public interface ChangeInfo {
         RENAME_COMPILATION_UNIT,
         RENAME_PACKAGE,
         UPDATE,
-        MOVE
+        MOVE,
+        EXTRACT_METHOD
     }
 }

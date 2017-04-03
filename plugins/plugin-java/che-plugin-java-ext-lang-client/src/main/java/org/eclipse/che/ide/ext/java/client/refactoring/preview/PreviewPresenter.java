@@ -96,6 +96,20 @@ public class PreviewPresenter implements PreviewView.ActionDelegate {
         view.show();
     }
 
+    public void show(String refactoringSessionId) {
+        session = dtoFactory.createDto(RefactoringSession.class);
+        session.setSessionId(refactoringSessionId);
+
+        refactoringService.getRefactoringPreview(session).then(new Operation<RefactoringPreview>() {
+            @Override
+            public void apply(RefactoringPreview changes) throws OperationException {
+                view.setTreeOfChanges(changes);
+            }
+        });
+
+        view.show();
+    }
+
     /**
      * Set a title of the window.
      *

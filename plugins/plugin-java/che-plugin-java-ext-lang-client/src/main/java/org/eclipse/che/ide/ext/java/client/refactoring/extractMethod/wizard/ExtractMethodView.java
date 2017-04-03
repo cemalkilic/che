@@ -15,7 +15,7 @@ import com.google.inject.ImplementedBy;
 import org.eclipse.che.ide.api.mvp.View;
 import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringStatus;
 
-//@ImplementedBy(RenameViewImpl.class)
+@ImplementedBy(ExtractMethodViewImpl.class)
 interface ExtractMethodView extends View<ExtractMethodView.ActionDelegate> {
 
     /** Returns new name */
@@ -23,11 +23,40 @@ interface ExtractMethodView extends View<ExtractMethodView.ActionDelegate> {
 
     void setFocus();
 
+    void show();
+
     void showStatusMessage(RefactoringStatus status);
+
+    void setEnablePreviewButton(boolean isEnable);
+
+    /**
+     * Set enable scope of the Accept button.
+     *
+     * @param isEnable
+     *         enable state of scope property
+     */
+    void setEnableAcceptButton(boolean isEnable);
+
+    /**
+     * Show error message into bottom of view.
+     *
+     * @param status
+     *         status of error move operation
+     */
+    void showErrorMessage(RefactoringStatus status);
+
+    /** Set empty text into error label */
+    void clearErrorLabel();
 
     boolean isDeclareVarArgs();
 
     boolean isFoldParameters();
+
+    boolean isDeclareStatic();
+
+    String getFilePatterns();
+
+    void hide();
 
 
     interface ActionDelegate {

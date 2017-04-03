@@ -18,6 +18,8 @@ public final class RefactoringCoreMessages extends NLS {
 
 	public static String AbstractRenameChange_Renaming;
 
+	public static String AbstractExtractMethodChange_Extracting;
+
 	public static String ASTData_update_imports;
 
 	private static final String BUNDLE_NAME= "org.eclipse.jdt.internal.corext.refactoring.refactoring";//$NON-NLS-1$

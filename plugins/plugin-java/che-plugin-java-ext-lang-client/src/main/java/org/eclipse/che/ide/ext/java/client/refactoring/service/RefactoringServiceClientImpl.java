@@ -15,22 +15,7 @@ import com.google.inject.Singleton;
 
 import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ChangeCreationResult;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ChangeEnabledState;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ChangePreview;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.CreateMoveRefactoring;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.CreateRenameRefactoring;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.LinkedRenameRefactoringApply;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.MoveSettings;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringChange;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringPreview;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringResult;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringSession;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringStatus;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RenameRefactoringSession;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RenameSettings;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ReorgDestination;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ValidateNewName;
+import org.eclipse.che.ide.ext.java.shared.dto.refactoring.*;
 import org.eclipse.che.ide.rest.AsyncRequestFactory;
 import org.eclipse.che.ide.rest.DtoUnmarshallerFactory;
 import org.eclipse.che.ide.rest.StringUnmarshaller;
@@ -88,6 +73,17 @@ final class RefactoringServiceClientImpl implements RefactoringServiceClient {
                                   .loader(loader)
                                   .send(unmarshallerFactory.newUnmarshaller(RenameRefactoringSession.class));
     }
+
+    @Override
+    public Promise<ExtractMethodRefactoringSession> createExtractMethodRefactoring(CreateExtractMethodRefactoring settings) {
+        final String url = appContext.getDevMachine().getWsAgentBaseUrl() + pathToService + "extractMethod/create";
+        return asyncRequestFactory.createPostRequest(url, settings)
+                .header(ACCEPT, APPLICATION_JSON)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .loader(loader)
+                .send(unmarshallerFactory.newUnmarshaller(ExtractMethodRefactoringSession.class));
+    }
+
 
     /** {@inheritDoc} */
     @Override
@@ -206,6 +202,17 @@ final class RefactoringServiceClientImpl implements RefactoringServiceClient {
                                   .header(CONTENT_TYPE, APPLICATION_JSON)
                                   .loader(loader)
                                   .send();
+    }
+
+    @Override
+    public Promise<Void> setExtractMethodSettings(ExtractMethodSettings settings) {
+        final String url = appContext.getDevMachine().getWsAgentBaseUrl() + pathToService + "set/extractMethod/settings";
+
+        return asyncRequestFactory.createPostRequest(url, settings)
+                .header(ACCEPT, APPLICATION_JSON)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .loader(loader)
+                .send();
     }
 
     @Override

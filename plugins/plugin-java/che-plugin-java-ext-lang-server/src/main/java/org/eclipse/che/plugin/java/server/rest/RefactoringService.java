@@ -12,23 +12,7 @@ package org.eclipse.che.plugin.java.server.rest;
 
 import com.google.inject.Inject;
 
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ChangeCreationResult;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ChangeEnabledState;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ChangePreview;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.CreateMoveRefactoring;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.CreateRenameRefactoring;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ElementToMove;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.LinkedRenameRefactoringApply;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.MoveSettings;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringChange;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringPreview;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringResult;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringSession;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RefactoringStatus;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RenameRefactoringSession;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.RenameSettings;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ReorgDestination;
-import org.eclipse.che.ide.ext.java.shared.dto.refactoring.ValidateNewName;
+import org.eclipse.che.ide.ext.java.shared.dto.refactoring.*;
 import org.eclipse.che.plugin.java.server.refactoring.RefactoringException;
 import org.eclipse.che.plugin.java.server.refactoring.RefactoringManager;
 import org.eclipse.core.resources.IResource;
@@ -48,6 +32,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
+import java.sql.Ref;
 import java.util.function.Function;
 
 /**
@@ -269,6 +254,17 @@ public class RefactoringService {
         }
 
         return manager.createRenameRefactoring(elementToRename, cu, settings.getOffset(), settings.isRefactorLightweight());
+    }
+
+    public ExtractMethodRefactoringSession createExtractMethodRefactoring(CreateExtractMethodRefactoring settings)
+            throws CoreException, RefactoringException {
+        IJavaElement methodToExtract;
+        ICompilationUnit cu = null;
+        IJavaProject javaProject = model.getJavaProject(settings.getProjectPath());
+        cu = javaProject.findType(settings.getPath()).getCompilationUnit();
+        methodToExtract = getSelectionElement(cu, settings.getOffset());
+
+        return manager.createExtract
     }
 
     /**
