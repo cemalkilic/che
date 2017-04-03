@@ -20,11 +20,14 @@ import org.eclipse.che.ide.api.app.AppContext;
 import org.eclipse.che.ide.api.editor.EditorAgent;
 import com.google.inject.Singleton;
 import org.eclipse.che.ide.api.editor.EditorPartPresenter;
-import org.eclipse.che.ide.api.editor.OpenEditorCallbackImpl;
 import org.eclipse.che.ide.api.editor.document.Document;
 import org.eclipse.che.ide.api.editor.text.LinearRange;
+import org.eclipse.che.ide.api.editor.text.TextPosition;
+import org.eclipse.che.ide.api.editor.text.TextRange;
 import org.eclipse.che.ide.api.editor.texteditor.TextEditor;
 import org.eclipse.che.ide.api.resources.*;
+import org.eclipse.che.ide.dto.DtoFactory;
+import org.eclipse.che.ide.editor.orion.client.OrionEditorPresenter;
 import org.eclipse.che.ide.ext.java.client.navigation.filestructure.FileStructurePresenter;
 import org.eclipse.che.ide.ext.java.client.navigation.service.JavaNavigationService;
 import org.eclipse.che.ide.ext.java.client.resource.SourceFolderMarker;
@@ -36,10 +39,14 @@ import org.eclipse.che.ide.ext.java.shared.dto.Region;
 import org.eclipse.che.ide.ext.java.shared.dto.model.CompilationUnit;
 import org.eclipse.che.ide.ext.java.shared.dto.model.Member;
 import org.eclipse.che.ide.ext.java.shared.dto.model.Method;
+import org.eclipse.che.ide.ext.java.shared.dto.model.MethodParameters;
 import org.eclipse.che.ide.resource.Path;
+import org.eclipse.che.ide.rest.DtoUnmarshallerFactory;
+import org.eclipse.che.ide.rest.Unmarshallable;
 import org.eclipse.che.ide.ui.loaders.request.LoaderFactory;
 import org.eclipse.che.ide.ui.loaders.request.MessageLoader;
 import org.eclipse.che.ide.util.loging.Log;
+import org.eclipse.che.plugin.java.server.dto.DtoServerImpls;
 
 /**
  * Created by cemal on 12.03.2017.
@@ -57,7 +64,6 @@ public class OverridableMethodsPresenter implements OverridableMethods.ActionDel
 
     private TextEditor activeEditor;
     private int        cursorOffset;
-    private Document document;
 
     @Inject
     public OverridableMethodsPresenter(OverridableMethods view,
@@ -112,7 +118,6 @@ public class OverridableMethodsPresenter implements OverridableMethods.ActionDel
                             view.setMethods(unit);
                             loader.hide();
                             view.show();
-                            Log.info(getClass(), "apply icinde");
                         }
                     }).catchError(new Operation<PromiseError>() {
                 @Override
@@ -125,12 +130,9 @@ public class OverridableMethodsPresenter implements OverridableMethods.ActionDel
         }
     }
 
-    // TODO_cemal implement actionPerformed
-    // when clicked, create the selected method in current file
     /** {@inheritDoc} */
     @Override
-    public void actionPerformed(Member member) {
-        this.document = activeEditor.getDocument();
+    public void actionPerformed(final Member member) {
 
         StringBuilder methodDef = new StringBuilder();
 
@@ -156,28 +158,58 @@ public class OverridableMethodsPresenter implements OverridableMethods.ActionDel
             // append return type
             methodDef.append(method.getReturnType()).append(" ");
 
-            // append method name and bracket
+            // append method name
             methodDef.append(method.getElementName());
+
+            // append the parameter
+            methodDef.append("(");
+
+//            DtoFactory factory = new DtoFactory();
+//            MethodParameters methodParameters = factory.createDto(MethodParameters.class);
+
+            methodDef.append(")");
+
             methodDef.append("{").append("\n");
 
             // append the method body as
             // super.<method_name>();
+            if(method.getReturnType() != "void"){
+                methodDef.append("return ");
+            }
+
             methodDef.append("super.")
                     .append(method.getElementName())
                     .append("();");
 
             // append the closing bracket
-            methodDef.append("}");
+            methodDef.append("\n}");
 
+            // after creating the method definition
+            // update the editor
+            Document document = activeEditor.getDocument();
+
+            String contentBeforeCursor = document.getContentRange(new TextRange(new TextPosition(0,0), document.getCursorPosition()));
+            String allContent = document.getContents();
+
+            int indexOf = allContent.indexOf(contentBeforeCursor);
+
+            String contentAfterCursor = allContent.substring((indexOf + contentBeforeCursor.length()) + 1, allContent.length());
+
+            String newContent = contentBeforeCursor + "\n" + methodDef.toString() + "\n" + contentAfterCursor;
+            Log.info(getClass(), "newContent:", newContent);
+
+            VirtualFile file = document.getFile();
+
+            if(file.isReadOnly()){
+                Log.error(getClass(), "File is read only:", file.getName());
+            } else {
+                file.updateContent(newContent);
+                document.setFile(file);
+                activeEditor.refreshEditor();
+                Log.info(getClass(),"File updated");
+            }
 
         }
-        else{
-            // do nothing
-        }
-
-        // select the end of document and
-        // add the created methodDef.
-
     }
 
     @Override
@@ -185,6 +217,7 @@ public class OverridableMethodsPresenter implements OverridableMethods.ActionDel
         activeEditor.setFocus();
         setCursor(activeEditor, cursorOffset);
     }
+
     private void setCursor(EditorPartPresenter editor, int offset) {
         if (editor instanceof TextEditor) {
             ((TextEditor)editor).getDocument().setSelectedRange(LinearRange.createWithStart(offset).andLength(0), true);
