@@ -10,12 +10,23 @@
  *******************************************************************************/
 package org.eclipse.che.ide.ext.java.shared.dto.refactoring;
 
+import org.eclipse.che.dto.shared.DTO;
+
 /**
  * Created by awesome on 26.03.17.
  */
+@DTO
 public interface CreateExtractMethodRefactoring {
 
     int getOffset();
 
     void setOffset(int offset);
+
+    void setPath(String path);
+
+    void setProjectPath(String projectPath);
+
+    String getPath();
+
+    String getProjectPath();
 }
