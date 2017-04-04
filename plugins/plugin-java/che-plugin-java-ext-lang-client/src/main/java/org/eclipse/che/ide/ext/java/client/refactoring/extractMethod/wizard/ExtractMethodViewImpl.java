@@ -84,8 +84,11 @@ public class ExtractMethodViewImpl extends Window implements ExtractMethodView {
         return declareVarArgs.getValue();
     }
 
+    @Override
+    public String getMethodName() { return methodName.getValue(); }
 
-
+    @Override
+    public String getModifier() { return modifierBox.getSelectedValue(); }
 
     private ActionDelegate delegate;
     private Button accept;

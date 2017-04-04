@@ -101,9 +101,12 @@ public class ExtractMethodPresenter implements ExtractMethodView.ActionDelegate 
         this.dialogFactory = dialogFactory;
     }
 
-    public void show(RefactorInfo refactorInfo) {
-        this.refactorInfo = refactorInfo;
+    public void show() {
+        prepareWizard();
+        view.show();
+
         final CreateExtractMethodRefactoring createExtractMethodRefactoring = createExtractMethodRefactoringDto();
+
 
         Promise<ExtractMethodRefactoringSession> createExtractMethodPromise = refactoringService.createExtractMethodRefactoring(createExtractMethodRefactoring);
         createExtractMethodPromise.then(new Operation<ExtractMethodRefactoringSession>() {
@@ -117,6 +120,8 @@ public class ExtractMethodPresenter implements ExtractMethodView.ActionDelegate 
                 notificationManager.notify(locale.failedToExtractMethod(), arg.getMessage(), FAIL, FLOAT_MODE);
             }
         });
+
+
 
     }
 
@@ -205,8 +210,8 @@ public class ExtractMethodPresenter implements ExtractMethodView.ActionDelegate 
 
     private void prepareWizard() {
         view.clearErrorLabel();
-        view.setEnableAcceptButton(true);
-        view.setEnablePreviewButton(true);
+        view.setEnableAcceptButton(false);
+        view.setEnablePreviewButton(false);
     }
 
     private void showPreview() {
@@ -237,7 +242,7 @@ public class ExtractMethodPresenter implements ExtractMethodView.ActionDelegate 
 
         dialogFactory.createConfirmDialog(locale.warningOperationTitle(),
                 entries.isEmpty() ? locale.warningOperationContent() : entries.get(0).getMessage(),
-                locale.renameRename(),
+                locale.extractMethodRefactoringActionDescription(),
                 locale.buttonCancel(),
                 new ConfirmCallback() {
                     @Override

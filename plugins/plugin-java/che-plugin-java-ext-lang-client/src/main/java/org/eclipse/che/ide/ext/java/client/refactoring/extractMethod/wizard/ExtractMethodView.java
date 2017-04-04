@@ -23,6 +23,10 @@ interface ExtractMethodView extends View<ExtractMethodView.ActionDelegate> {
 
     void setFocus();
 
+    String getMethodName();
+
+    String getModifier();
+
     void show();
 
     void showStatusMessage(RefactoringStatus status);

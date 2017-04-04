@@ -83,15 +83,5 @@ public class ExtractMethodRefactoringAction extends AbstractPerspectiveAction im
     @Override
     public void actionPerformed(ActionEvent e) {
         extractMethodPresenter.show();
-
-
-        /*if (editorInFocus) {
-            final EditorPartPresenter editorPart = editorAgent.getActiveEditor();
-            if (editorPart == null || !(editorPart instanceof TextEditor)) {
-                return;
-            }
-
-            javaRefactoringExtractMethod.refactor((TextEditor) editorPart);
-        }*/
     }
 }
