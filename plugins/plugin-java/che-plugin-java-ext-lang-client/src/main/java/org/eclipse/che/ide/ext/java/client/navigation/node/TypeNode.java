@@ -22,6 +22,7 @@ import org.eclipse.che.ide.api.data.tree.Node;
 import org.eclipse.che.ide.ext.java.client.JavaResources;
 import org.eclipse.che.ide.ext.java.client.navigation.factory.NodeFactory;
 import org.eclipse.che.ide.ext.java.client.navigation.filestructure.FileStructurePresenter;
+import org.eclipse.che.ide.ext.java.client.navigation.overrideablemethods.OverridableMethodsPresenter;
 import org.eclipse.che.ide.ext.java.client.search.node.NodeComparator;
 import org.eclipse.che.ide.ext.java.client.util.Flags;
 import org.eclipse.che.ide.ext.java.shared.dto.model.CompilationUnit;
@@ -46,6 +47,7 @@ public class TypeNode extends AbstractPresentationNode implements HasAction {
     private final JavaResources          resources;
     private final NodeFactory            nodeFactory;
     private final FileStructurePresenter fileStructurePresenter;
+    private final OverridableMethodsPresenter overridableMethodsPresenter;
     private final Type                   type;
     private final CompilationUnit        compilationUnit;
     private final boolean                isShowInheritedMembers;
@@ -55,6 +57,7 @@ public class TypeNode extends AbstractPresentationNode implements HasAction {
     public TypeNode(JavaResources resources,
                     NodeFactory nodeFactory,
                     FileStructurePresenter fileStructurePresenter,
+                    OverridableMethodsPresenter overridableMethodsPresenter,
                     @Assisted Type type,
                     @Assisted CompilationUnit compilationUnit,
                     @Assisted("showInheritedMembers") boolean showInheritedMembers,
@@ -66,6 +69,7 @@ public class TypeNode extends AbstractPresentationNode implements HasAction {
         this.compilationUnit = compilationUnit;
         this.isShowInheritedMembers = showInheritedMembers;
         this.isFromSuper = isFromSuper;
+        this.overridableMethodsPresenter = overridableMethodsPresenter;
     }
 
     /** {@inheritDoc} */
@@ -133,18 +137,35 @@ public class TypeNode extends AbstractPresentationNode implements HasAction {
     /** {@inheritDoc} */
     @Override
     public void actionPerformed() {
-        fileStructurePresenter.actionPerformed(type);
+        if(OverridableMethodsPresenter.OVERRIDABLE_ACTIVE){
+            overridableMethodsPresenter.actionPerformed(type);
+        } else{
+            fileStructurePresenter.actionPerformed(type);
+        }
     }
 
     private void createTypeChildren(List<Node> child, Type type, boolean isFromSuper) {
         for (Method method : type.getMethods()) {
             if (!method.getLabel().startsWith("<")) {
-                child.add(nodeFactory.create(method, isShowInheritedMembers, isFromSuper));
+                if(OverridableMethodsPresenter.OVERRIDABLE_ACTIVE) {
+                    if (!Flags.isPrivate(method.getFlags())) {
+                        child.add(nodeFactory.create(method, isShowInheritedMembers, isFromSuper));
+                    }
+                } else{
+                    child.add(nodeFactory.create(method, isShowInheritedMembers, isFromSuper));
+                }
             }
         }
 
         for (Field field : type.getFields()) {
-            child.add(nodeFactory.create(field, isShowInheritedMembers, isFromSuper));
+            if(OverridableMethodsPresenter.OVERRIDABLE_ACTIVE) {
+                if (!Flags.isPrivate(field.getFlags())) {
+                    child.add(nodeFactory.create(field, isShowInheritedMembers, isFromSuper));
+                }
+            } else{
+                child.add(nodeFactory.create(field, isShowInheritedMembers, isFromSuper));
+            }
+
         }
 
         for (Initializer initializer : type.getInitializers()) {
@@ -152,7 +173,13 @@ public class TypeNode extends AbstractPresentationNode implements HasAction {
         }
 
         for (Type subType : type.getTypes()) {
-            child.add(nodeFactory.create(subType, compilationUnit, isShowInheritedMembers, isFromSuper));
+            if(OverridableMethodsPresenter.OVERRIDABLE_ACTIVE) {
+                if (!Flags.isPrivate(subType.getFlags())) {
+                    child.add(nodeFactory.create(subType, compilationUnit, isShowInheritedMembers, isFromSuper));
+                }
+            } else{
+                child.add(nodeFactory.create(subType, compilationUnit, isShowInheritedMembers, isFromSuper));
+            }
         }
     }
 

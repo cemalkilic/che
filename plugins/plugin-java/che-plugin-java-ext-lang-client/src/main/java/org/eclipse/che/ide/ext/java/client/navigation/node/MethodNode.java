@@ -18,6 +18,7 @@ import org.eclipse.che.ide.api.data.tree.HasAction;
 import org.eclipse.che.ide.api.data.tree.Node;
 import org.eclipse.che.ide.ext.java.client.JavaResources;
 import org.eclipse.che.ide.ext.java.client.navigation.filestructure.FileStructurePresenter;
+import org.eclipse.che.ide.ext.java.client.navigation.overrideablemethods.OverridableMethodsPresenter;
 import org.eclipse.che.ide.ext.java.client.util.Flags;
 import org.eclipse.che.ide.ext.java.shared.dto.model.Method;
 import org.eclipse.che.ide.ui.smartTree.presentation.NodePresentation;
@@ -36,6 +37,7 @@ public class MethodNode extends AbstractPresentationNode implements HasAction {
     private final Method                 method;
     private final boolean                isFromSuper;
     private final FileStructurePresenter fileStructurePresenter;
+    private final OverridableMethodsPresenter overridableMethodsPresenter;
 
     private boolean showingInheritedMembers;
 
@@ -44,12 +46,14 @@ public class MethodNode extends AbstractPresentationNode implements HasAction {
                       @Assisted Method method,
                       @Assisted("showInheritedMembers") boolean showInheritedMembers,
                       @Assisted("isFromSuper") boolean isFromSuper,
-                      FileStructurePresenter fileStructurePresenter) {
+                      FileStructurePresenter fileStructurePresenter,
+                      OverridableMethodsPresenter overridableMethodsPresenter) {
         this.resources = resources;
         this.method = method;
         this.isFromSuper = isFromSuper;
         this.fileStructurePresenter = fileStructurePresenter;
         this.showingInheritedMembers = showInheritedMembers;
+        this.overridableMethodsPresenter = overridableMethodsPresenter;
     }
 
     /** {@inheritDoc} */
@@ -61,16 +65,29 @@ public class MethodNode extends AbstractPresentationNode implements HasAction {
     /** {@inheritDoc} */
     @Override
     public void updatePresentation(@NotNull NodePresentation presentation) {
-        StringBuilder presentableName = new StringBuilder(method.getLabel() + " : " + method.getReturnType());
-        if (showingInheritedMembers) {
-            String path = method.getRootPath();
-            String className = method.isBinary() ? path.substring(path.lastIndexOf('.') + 1)
-                                                 : path.substring(path.lastIndexOf('/') + 1, path.indexOf('.'));
+        StringBuilder presentableName = new StringBuilder();
+        if(!OverridableMethodsPresenter.OVERRIDABLE_ACTIVE) {
+            presentableName.append(method.getLabel() + " : " + method.getReturnType());
 
-            presentableName.append(" -> ").append(className);
+            if (showingInheritedMembers) {
+                String path = method.getRootPath();
+                String className = method.isBinary() ? path.substring(path.lastIndexOf('.') + 1)
+                        : path.substring(path.lastIndexOf('/') + 1, path.indexOf('.'));
+
+                presentableName.append(" -> ").append(className);
+            }
+
+            updatePresentationField(isFromSuper, presentation, presentableName.toString(), resources);
+
         }
-
-        updatePresentationField(isFromSuper, presentation, presentableName.toString(), resources);
+        // if the overridable methods window is active
+        // private methods should not be listed.
+        else{
+            if(!Flags.isPrivate(method.getFlags())){
+                presentableName.append(method.getLabel() + " : " + method.getReturnType());
+                updatePresentationField(isFromSuper, presentation, presentableName.toString(), resources);
+            }
+        }
 
         SVGResource icon;
         int flag = method.getFlags();
@@ -89,7 +106,11 @@ public class MethodNode extends AbstractPresentationNode implements HasAction {
     /** {@inheritDoc} */
     @Override
     public void actionPerformed() {
-        fileStructurePresenter.actionPerformed(method);
+        if(OverridableMethodsPresenter.OVERRIDABLE_ACTIVE){
+            overridableMethodsPresenter.actionPerformed(method);
+        } else{
+            fileStructurePresenter.actionPerformed(method);
+        }
     }
 
     /** {@inheritDoc} */

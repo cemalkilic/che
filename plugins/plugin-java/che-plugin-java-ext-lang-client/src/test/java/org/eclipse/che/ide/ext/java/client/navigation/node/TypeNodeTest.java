@@ -18,6 +18,7 @@ import org.eclipse.che.ide.api.data.tree.Node;
 import org.eclipse.che.ide.ext.java.client.JavaResources;
 import org.eclipse.che.ide.ext.java.client.navigation.factory.NodeFactory;
 import org.eclipse.che.ide.ext.java.client.navigation.filestructure.FileStructurePresenter;
+import org.eclipse.che.ide.ext.java.client.navigation.overrideablemethods.OverridableMethodsPresenter;
 import org.eclipse.che.ide.ext.java.shared.dto.model.CompilationUnit;
 import org.eclipse.che.ide.ext.java.shared.dto.model.Type;
 import org.eclipse.che.ide.ui.smartTree.presentation.NodePresentation;
@@ -50,6 +51,8 @@ public class TypeNodeTest {
     @Mock
     private FileStructurePresenter fileStructurePresenter;
     @Mock
+    private OverridableMethodsPresenter overridableMethodsPresenter;
+    @Mock
     private CompilationUnit        compilationUnit;
     @Mock
     private Type                   type;
@@ -76,7 +79,7 @@ public class TypeNodeTest {
         when(type.getElementName()).thenReturn(NAME);
         when(type.getLabel()).thenReturn(NAME);
 
-        typeNode = new TypeNode(resources, nodeFactory, fileStructurePresenter, type, compilationUnit, true, false);
+        typeNode = new TypeNode(resources, nodeFactory, fileStructurePresenter, overridableMethodsPresenter, type, compilationUnit, true, false);
     }
 
     @Test
@@ -103,7 +106,7 @@ public class TypeNodeTest {
 
     @Test
     public void presentationNameShouldBeUpdatedIfInheritedMemberHide() throws Exception {
-        typeNode = new TypeNode(resources, nodeFactory, fileStructurePresenter, type, compilationUnit, false, false);
+        typeNode = new TypeNode(resources, nodeFactory, fileStructurePresenter, overridableMethodsPresenter, type, compilationUnit, false, false);
 
         typeNode.updatePresentation(presentation);
 

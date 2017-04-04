@@ -14,6 +14,7 @@ import com.google.gwtmockito.GwtMockitoTestRunner;
 
 import org.eclipse.che.ide.ext.java.client.JavaResources;
 import org.eclipse.che.ide.ext.java.client.navigation.filestructure.FileStructurePresenter;
+import org.eclipse.che.ide.ext.java.client.navigation.overrideablemethods.OverridableMethodsPresenter;
 import org.eclipse.che.ide.ext.java.shared.dto.model.Method;
 import org.eclipse.che.ide.ui.smartTree.presentation.NodePresentation;
 import org.junit.Before;
@@ -43,6 +44,8 @@ public class MethodNodeTest {
     @Mock
     private FileStructurePresenter fileStructurePresenter;
     @Mock
+    private OverridableMethodsPresenter overridableMethodsPresenter;
+    @Mock
     private Method                 method;
     @Mock
     private NodePresentation       presentation;
@@ -60,7 +63,7 @@ public class MethodNodeTest {
         when(method.getElementName()).thenReturn(NAME);
         when(method.getLabel()).thenReturn(NAME);
 
-        methodNode = new MethodNode(resources, method, true, false, fileStructurePresenter);
+        methodNode = new MethodNode(resources, method, true, false, fileStructurePresenter, overridableMethodsPresenter);
     }
 
     @Test
@@ -92,7 +95,7 @@ public class MethodNodeTest {
 
     @Test
     public void presentationNameShouldBeUpdatedIfInheritedMemberHide() throws Exception {
-        methodNode = new MethodNode(resources, method, false, false, fileStructurePresenter);
+        methodNode = new MethodNode(resources, method, false, false, fileStructurePresenter, overridableMethodsPresenter);
 
         methodNode.updatePresentation(presentation);
 

@@ -14,6 +14,7 @@ import com.google.gwtmockito.GwtMockitoTestRunner;
 
 import org.eclipse.che.ide.ext.java.client.JavaResources;
 import org.eclipse.che.ide.ext.java.client.navigation.filestructure.FileStructurePresenter;
+import org.eclipse.che.ide.ext.java.client.navigation.overrideablemethods.OverridableMethodsPresenter;
 import org.eclipse.che.ide.ext.java.shared.dto.model.Field;
 import org.eclipse.che.ide.ui.smartTree.presentation.NodePresentation;
 import org.junit.Before;
@@ -42,6 +43,8 @@ public class FieldNodeTest {
     @Mock
     private FileStructurePresenter fileStructurePresenter;
     @Mock
+    private OverridableMethodsPresenter overridableMethodsPresenter;
+    @Mock
     private Field                  field;
     @Mock
     private NodePresentation       presentation;
@@ -57,7 +60,7 @@ public class FieldNodeTest {
         when(resources.publicMethod()).thenReturn(svgResource);
         when(field.getElementName()).thenReturn(NAME);
 
-        fieldNode = new FieldNode(resources, field, true, false, fileStructurePresenter);
+        fieldNode = new FieldNode(resources, field, true, false, fileStructurePresenter, overridableMethodsPresenter);
     }
 
     @Test
@@ -89,7 +92,7 @@ public class FieldNodeTest {
 
     @Test
     public void presentationNameShouldBeUpdatedIfInheritedMemberHide() throws Exception {
-        fieldNode = new FieldNode(resources, field, false, false, fileStructurePresenter);
+        fieldNode = new FieldNode(resources, field, false, false, fileStructurePresenter, overridableMethodsPresenter);
 
         fieldNode.updatePresentation(presentation);
 
